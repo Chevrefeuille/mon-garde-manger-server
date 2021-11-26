@@ -20,6 +20,9 @@ const IngredientSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Ingredient = mongoose.model<IngredientDocument>('Ingredient', IngredientSchema);
+const IngredientModel = mongoose.model<IngredientDocument>(
+  'Ingredient',
+  IngredientSchema,
+);
 
-export default Ingredient;
+export default IngredientModel;

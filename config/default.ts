@@ -6,4 +6,5 @@ export default {
   port: process.env.PORT || 5000,
   host: 'localhost',
   dbUri: process.env.ATLAS_URI,
+  saltWorkFactor: 10,
 };

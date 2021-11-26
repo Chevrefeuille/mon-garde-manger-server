@@ -1,23 +1,21 @@
-import {
-  FilterQuery,
-  QueryOptions,
-  DocumentDefinition,
-} from 'mongoose';
-import Ingredient, { IngredientDocument } from '../model/ingredient.model';
+import { FilterQuery, QueryOptions, DocumentDefinition } from 'mongoose';
+import IngredientModel, { IngredientDocument } from '../model/ingredient.model';
 
 export async function findIngredients() {
-  return Ingredient.find().lean();
+  return IngredientModel.find().lean();
 }
 
 export function findIngredient(
   query: FilterQuery<IngredientDocument>,
   options: QueryOptions = { lean: true },
 ) {
-  return Ingredient.findOne(query, {}, options);
+  return IngredientModel.findOne(query, {}, options);
 }
 
-export function createIngredient(input: DocumentDefinition<IngredientDocument>) {
-  return Ingredient.create(input);
+export function createIngredient(
+  input: DocumentDefinition<IngredientDocument>,
+) {
+  return IngredientModel.create(input);
 }
 
 export function findAndUpdateIngredient(
@@ -25,9 +23,9 @@ export function findAndUpdateIngredient(
   update: DocumentDefinition<IngredientDocument>,
   options: QueryOptions,
 ) {
-  return Ingredient.findOneAndUpdate(query, update, options);
+  return IngredientModel.findOneAndUpdate(query, update, options);
 }
 
 export function deleteIngredient(query: FilterQuery<IngredientDocument>) {
-  return Ingredient.deleteOne(query);
+  return IngredientModel.deleteOne(query);
 }

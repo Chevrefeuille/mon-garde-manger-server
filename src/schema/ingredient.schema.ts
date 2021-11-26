@@ -1,15 +1,21 @@
-import { object, string, number } from 'yup';
+import { object, string, number } from 'zod';
 
 const payload = {
   body: object({
-    name: string().required('Name is required'),
-    amount: number().required('Amount is required'),
+    name: string({
+      required_error: 'Name is required',
+    }),
+    amount: number({
+      required_error: 'Amount is required',
+    }),
   }),
 };
 
 const params = {
   params: object({
-    ingredientId: string().required('ingredientId is required'),
+    ingredientId: string({
+      required_error: 'ingredientId is required',
+    }),
   }),
 };
 
