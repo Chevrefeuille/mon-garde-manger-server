@@ -4,17 +4,18 @@ module.exports = {
     node: true,
   },
   extends: [
-    'airbnb-base',
-    'airbnb-typescript/base',
+    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
   ],
   parserOptions: {
-    parser: 'babel-eslint',
+    ecmaVersion: 2020,
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  ignorePatterns: ['.eslintrc.js'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },
+  ignorePatterns: ['.eslintrc.js'],
 };
