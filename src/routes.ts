@@ -28,9 +28,6 @@ export default function (app: Express) {
 
   app.post('/api/users', validateResource(createUserSchema), createUserHandler);
 
-  // Get all the ingredients
-  app.get('/api/ingredients', getIngredientsHandler);
-
   app.post(
     '/api/sessions',
     validateResource(createSessionSchema),
@@ -41,31 +38,34 @@ export default function (app: Express) {
 
   app.delete('/api/sessions', requireUser, deleteSessionHandler);
 
+  // Get all the ingredients
+  app.get('/api/ingredients', requireUser, getIngredientsHandler);
+
   // Create an ingredient
   app.post(
     '/api/ingredients',
-    validateResource(createIngredientSchema),
+    [requireUser, validateResource(createIngredientSchema)],
     createIngredientHandler,
   );
 
   // Get an ingredient
   app.get(
     '/api/ingredients/:ingredientId',
-    validateResource(getIngredientSchema),
+    [requireUser, validateResource(getIngredientSchema)],
     getIngredientHandler,
   );
 
   // Update an ingredient
   app.put(
     '/api/ingredients/:ingredientId',
-    validateResource(updateIngredientSchema),
+    [requireUser, validateResource(updateIngredientSchema)],
     updateIngredientHandler,
   );
 
   // Delete an ingredient
   app.delete(
     '/api/ingredients/:ingredientId',
-    validateResource(deleteIngredientSchema),
+    [requireUser, validateResource(deleteIngredientSchema)],
     deleteIngredientHandler,
   );
 }

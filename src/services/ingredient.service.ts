@@ -1,6 +1,7 @@
 import { FilterQuery, QueryOptions, DocumentDefinition } from 'mongoose';
 import IngredientModel, {
   IngredientDocument,
+  IngredientInput,
 } from '../models/ingredient.model';
 
 export async function findIngredients() {
@@ -14,9 +15,7 @@ export function findIngredient(
   return IngredientModel.findOne(query, {}, options);
 }
 
-export function createIngredient(
-  input: DocumentDefinition<IngredientDocument>,
-) {
+export function createIngredient(input: IngredientInput) {
   return IngredientModel.create(input);
 }
 

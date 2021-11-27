@@ -1,21 +1,26 @@
 import mongoose from 'mongoose';
-import { nanoid } from 'nanoid';
+import ingredientEnums from '../enums/ingredient.enum';
 
-export interface IngredientDocument extends mongoose.Document {
+export interface IngredientInput {
   name: string;
-  amount: number;
+  type: string;
+  unit: string;
+}
+
+export interface IngredientDocument extends IngredientInput, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const IngredientSchema = new mongoose.Schema(
   {
-    ingredientId: {
+    name: { type: String, required: true },
+    type: {
       type: String,
       required: true,
-      unique: true,
-      default: () => nanoid(10),
+      enum: ingredientEnums.types,
     },
-    name: { type: String, default: true },
-    amount: { type: Number },
+    unit: { type: String, required: true },
   },
   { timestamps: true },
 );

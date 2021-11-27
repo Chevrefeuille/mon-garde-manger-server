@@ -1,19 +1,21 @@
-import { object, string, number } from 'zod';
+import { object, string, TypeOf, z } from 'zod';
+import ingredientEnums from '../enums/ingredient.enum';
 
 const payload = {
   body: object({
     name: string({
       required_error: 'Name is required',
     }),
-    amount: number({
-      required_error: 'Amount is required',
+    type: z.enum(ingredientEnums.types),
+    unit: string({
+      required_error: 'Unit is required',
     }),
   }),
 };
 
 const params = {
   params: object({
-    ingredientId: string({
+    _id: string({
       required_error: 'ingredientId is required',
     }),
   }),
@@ -35,3 +37,8 @@ export const updateIngredientSchema = object({
 export const deleteIngredientSchema = object({
   ...params,
 });
+
+export type CreateIngredientInput = TypeOf<typeof createIngredientSchema>;
+export type UpdateIngredientInput = TypeOf<typeof updateIngredientSchema>;
+export type ReadIngredientInput = TypeOf<typeof getIngredientSchema>;
+export type DeleteIngredientInput = TypeOf<typeof deleteIngredientSchema>;

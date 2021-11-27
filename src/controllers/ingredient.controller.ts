@@ -7,6 +7,10 @@ import {
   findAndUpdateIngredient,
   deleteIngredient,
 } from '../services/ingredient.service';
+import {
+  CreateIngredientInput,
+  UpdateIngredientInput,
+} from '../schemas/ingredient.schema';
 
 export async function getIngredientsHandler(req: Request, res: Response) {
   const sessions = await findIngredients();
@@ -14,8 +18,11 @@ export async function getIngredientsHandler(req: Request, res: Response) {
   return res.send(sessions);
 }
 
-export async function getIngredientHandler(req: Request, res: Response) {
-  const ingredientId = get(req, 'params.ingredientId');
+export async function getIngredientHandler(
+  req: Request<UpdateIngredientInput['params']>,
+  res: Response,
+) {
+  const ingredientId = get(req, 'params._id');
   const ingredient = await findIngredient({ ingredientId });
 
   if (!ingredient) {
@@ -25,15 +32,25 @@ export async function getIngredientHandler(req: Request, res: Response) {
   return res.send(ingredient);
 }
 
-export async function createIngredientHandler(req: Request, res: Response) {
+export async function createIngredientHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    CreateIngredientInput['body']
+  >,
+  res: Response,
+) {
   const requestBody = req.body;
   const post = await createIngredient({ ...requestBody });
 
   return res.send(post);
 }
 
-export async function updateIngredientHandler(req: Request, res: Response) {
-  const ingredientId = get(req, 'params.ingredientId');
+export async function updateIngredientHandler(
+  req: Request<UpdateIngredientInput['params']>,
+  res: Response,
+) {
+  const ingredientId = get(req, 'params._id');
   const update = req.body;
 
   const ingredient = await findIngredient({ ingredientId });
@@ -51,8 +68,11 @@ export async function updateIngredientHandler(req: Request, res: Response) {
   return res.send(updatedIngredient);
 }
 
-export async function deleteIngredientHandler(req: Request, res: Response) {
-  const ingredientId = get(req, 'params.ingredientId');
+export async function deleteIngredientHandler(
+  req: Request<UpdateIngredientInput['params']>,
+  res: Response,
+) {
+  const ingredientId = get(req, 'params._id');
 
   const ingredient = await findIngredient({ ingredientId });
 
