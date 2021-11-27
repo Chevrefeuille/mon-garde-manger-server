@@ -7,9 +7,7 @@ const payload = {
       required_error: 'Name is required',
     }),
     type: z.enum(ingredientEnums.types),
-    unit: string({
-      required_error: 'Unit is required',
-    }),
+    unit: z.enum(ingredientEnums.units),
   }),
 };
 

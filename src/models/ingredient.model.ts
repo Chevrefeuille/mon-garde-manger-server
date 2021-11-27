@@ -20,7 +20,11 @@ const IngredientSchema = new mongoose.Schema(
       required: true,
       enum: ingredientEnums.types,
     },
-    unit: { type: String, required: true },
+    unit: {
+      type: String,
+      required: true,
+      enum: ingredientEnums.units,
+    },
   },
   { timestamps: true },
 );
