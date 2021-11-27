@@ -1,8 +1,8 @@
 import { AnyZodObject } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import log from '../logger';
+import log from '../utils/logger';
 
-const validateRequest =
+const validate =
   (schema: AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,4 +18,4 @@ const validateRequest =
     }
   };
 
-export default validateRequest;
+export default validate;

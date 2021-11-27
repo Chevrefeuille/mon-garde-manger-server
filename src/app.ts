@@ -1,23 +1,23 @@
 import express from 'express';
 import config from 'config';
 import cors from 'cors';
-import log from './logger';
-import connect from './db/connect';
+import logger from './utils/logger';
+import connect from './utils/connect';
 import routes from './routes';
+import deserializeUser from './middlewares/deserializeUser';
 
-const port = config.get('port') as number;
-const host = config.get('host') as string;
+const port = config.get<number>('port') as number;
 
 const app = express();
 
 app.use(cors());
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(deserializeUser);
 
-app.listen(port, host, () => {
-  log.info(`Server listing at http://${host}:${port}`);
+app.listen(port, async () => {
+  logger.info(`App is running at http://localhost:${port}`);
+  await connect();
 
-  connect();
   routes(app);
 });

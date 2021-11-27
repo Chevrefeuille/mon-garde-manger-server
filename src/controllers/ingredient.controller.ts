@@ -6,7 +6,7 @@ import {
   createIngredient,
   findAndUpdateIngredient,
   deleteIngredient,
-} from '../service/ingredient.service';
+} from '../services/ingredient.service';
 
 export async function getIngredientsHandler(req: Request, res: Response) {
   const sessions = await findIngredients();
@@ -42,7 +42,11 @@ export async function updateIngredientHandler(req: Request, res: Response) {
     return res.sendStatus(404);
   }
 
-  const updatedIngredient = await findAndUpdateIngredient({ ingredientId }, update, { new: true });
+  const updatedIngredient = await findAndUpdateIngredient(
+    { ingredientId },
+    update,
+    { new: true },
+  );
 
   return res.send(updatedIngredient);
 }

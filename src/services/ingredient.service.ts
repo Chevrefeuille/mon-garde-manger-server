@@ -1,5 +1,7 @@
 import { FilterQuery, QueryOptions, DocumentDefinition } from 'mongoose';
-import IngredientModel, { IngredientDocument } from '../model/ingredient.model';
+import IngredientModel, {
+  IngredientDocument,
+} from '../models/ingredient.model';
 
 export async function findIngredients() {
   return IngredientModel.find().lean();

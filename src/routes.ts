@@ -1,54 +1,71 @@
 import { Express, Request, Response } from 'express';
-import validateRequest from './middleware';
-import createUserHandler from './controller/user.controller';
+import requireUser from './middlewares/requireUser';
+import validateResource from './middlewares/validateResource';
+import createUserHandler from './controllers/user.controller';
 import {
-  createIngredientSchema,
-  getIngredientSchema,
-  updateIngredientSchema,
-  deleteIngredientSchema,
-} from './schema/ingredient.schema';
+  createUserSessionHandler,
+  getUserSessionsHandler,
+  deleteSessionHandler,
+} from './controllers/session.controller';
 import {
   getIngredientsHandler,
   getIngredientHandler,
   createIngredientHandler,
   updateIngredientHandler,
   deleteIngredientHandler,
-} from './controller/ingredient.controller';
-import { createUserSchema } from './schema/user.schema';
+} from './controllers/ingredient.controller';
+import { createUserSchema } from './schemas/user.schema';
+import { createSessionSchema } from './schemas/session.schema';
+import {
+  createIngredientSchema,
+  getIngredientSchema,
+  updateIngredientSchema,
+  deleteIngredientSchema,
+} from './schemas/ingredient.schema';
 
 export default function (app: Express) {
   app.get('/healthcheck', (req: Request, res: Response) => res.sendStatus(200));
 
-  app.post('/api/users', validateRequest(createUserSchema), createUserHandler);
+  app.post('/api/users', validateResource(createUserSchema), createUserHandler);
 
   // Get all the ingredients
   app.get('/api/ingredients', getIngredientsHandler);
 
+  app.post(
+    '/api/sessions',
+    validateResource(createSessionSchema),
+    createUserSessionHandler,
+  );
+
+  app.get('/api/sessions', requireUser, getUserSessionsHandler);
+
+  app.delete('/api/sessions', requireUser, deleteSessionHandler);
+
   // Create an ingredient
   app.post(
     '/api/ingredients',
-    validateRequest(createIngredientSchema),
+    validateResource(createIngredientSchema),
     createIngredientHandler,
   );
 
   // Get an ingredient
   app.get(
     '/api/ingredients/:ingredientId',
-    validateRequest(getIngredientSchema),
+    validateResource(getIngredientSchema),
     getIngredientHandler,
   );
 
   // Update an ingredient
   app.put(
     '/api/ingredients/:ingredientId',
-    validateRequest(updateIngredientSchema),
+    validateResource(updateIngredientSchema),
     updateIngredientHandler,
   );
 
   // Delete an ingredient
   app.delete(
     '/api/ingredients/:ingredientId',
-    validateRequest(deleteIngredientSchema),
+    validateResource(deleteIngredientSchema),
     deleteIngredientHandler,
   );
 }

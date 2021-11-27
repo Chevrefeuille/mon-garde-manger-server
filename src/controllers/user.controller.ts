@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
-import logger from '../logger';
-import { CreateUserInput } from '../schema/user.schema';
-import createUser from '../service/user.service';
+import logger from '../utils/logger';
+import { CreateUserInput } from '../schemas/user.schema';
+import createUser from '../services/user.service';
 
 export default async function createUserHandler(
-  req: Request<unknown, unknown, CreateUserInput['body']>,
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    CreateUserInput['body']
+  >,
   res: Response,
 ) {
   try {

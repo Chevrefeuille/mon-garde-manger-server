@@ -11,7 +11,7 @@ export interface UserInput {
 export interface UserDocument extends UserInput, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
-  comparePassword(): Promise<boolean>;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const userSchema = new mongoose.Schema(
@@ -27,20 +27,25 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre('save', async function (next) {
   const user = this as UserDocument;
+
   if (!user.isModified('password')) {
     return next();
   }
+
   const salt = await bcrypt.genSalt(config.get<number>('saltWorkFactor'));
+
   const hash = await bcrypt.hashSync(user.password, salt);
 
   user.password = hash;
+
   return next();
 });
 
-userSchema.methods.comparePassword = async (
+userSchema.methods.comparePassword = async function (
   candidatePassword: string,
-): Promise<boolean> => {
-  const user = this as unknown as UserDocument;
+): Promise<boolean> {
+  const user = this as UserDocument;
+
   return bcrypt.compare(candidatePassword, user.password).catch(() => false);
 };
 
