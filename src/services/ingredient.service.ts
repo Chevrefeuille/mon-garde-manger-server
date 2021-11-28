@@ -15,6 +15,13 @@ export function findIngredient(
   return IngredientModel.findOne(query, {}, options);
 }
 
+export function findIngredientById(
+  query: FilterQuery<IngredientDocument>,
+  options: QueryOptions = { lean: true },
+) {
+  return IngredientModel.findById(query, {}, options);
+}
+
 export function createIngredient(input: IngredientInput) {
   return IngredientModel.create(input);
 }
@@ -24,9 +31,9 @@ export function findAndUpdateIngredient(
   update: DocumentDefinition<IngredientDocument>,
   options: QueryOptions,
 ) {
-  return IngredientModel.findOneAndUpdate(query, update, options);
+  return IngredientModel.findByIdAndUpdate(query, update, options);
 }
 
 export function deleteIngredient(query: FilterQuery<IngredientDocument>) {
-  return IngredientModel.deleteOne(query);
+  return IngredientModel.findByIdAndDelete(query);
 }

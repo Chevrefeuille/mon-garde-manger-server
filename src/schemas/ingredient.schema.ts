@@ -13,7 +13,7 @@ const payload = {
 
 const params = {
   params: object({
-    _id: string({
+    ingredientId: string({
       required_error: 'ingredientId is required',
     }),
   }),

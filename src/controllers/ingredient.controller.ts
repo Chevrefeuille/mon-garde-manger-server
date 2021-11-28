@@ -3,6 +3,7 @@ import { get } from 'lodash';
 import {
   findIngredients,
   findIngredient,
+  findIngredientById,
   createIngredient,
   findAndUpdateIngredient,
   deleteIngredient,
@@ -22,8 +23,8 @@ export async function getIngredientHandler(
   req: Request<UpdateIngredientInput['params']>,
   res: Response,
 ) {
-  const ingredientId = get(req, 'params._id');
-  const ingredient = await findIngredient({ ingredientId });
+  const ingredientId = get(req, 'params.ingredientId');
+  const ingredient = await findIngredientById(ingredientId);
 
   if (!ingredient) {
     return res.sendStatus(404);
@@ -50,17 +51,17 @@ export async function updateIngredientHandler(
   req: Request<UpdateIngredientInput['params']>,
   res: Response,
 ) {
-  const ingredientId = get(req, 'params._id');
+  const ingredientId = get(req, 'params.ingredientId');
   const update = req.body;
 
-  const ingredient = await findIngredient({ ingredientId });
+  const ingredient = await findIngredientById(ingredientId);
 
   if (!ingredient) {
     return res.sendStatus(404);
   }
 
   const updatedIngredient = await findAndUpdateIngredient(
-    { ingredientId },
+    ingredientId,
     update,
     { new: true },
   );
@@ -72,15 +73,15 @@ export async function deleteIngredientHandler(
   req: Request<UpdateIngredientInput['params']>,
   res: Response,
 ) {
-  const ingredientId = get(req, 'params._id');
+  const ingredientId = get(req, 'params.ingredientId');
 
-  const ingredient = await findIngredient({ ingredientId });
+  const ingredient = await findIngredientById(ingredientId);
 
   if (!ingredient) {
     return res.sendStatus(404);
   }
 
-  await deleteIngredient({ ingredientId });
+  await deleteIngredient(ingredientId);
 
   return res.sendStatus(200);
 }
