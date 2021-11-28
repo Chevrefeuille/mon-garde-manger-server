@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { get } from 'lodash';
 import {
   findIngredients,
-  findIngredient,
   findIngredientById,
   createIngredient,
   findAndUpdateIngredient,

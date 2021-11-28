@@ -14,6 +14,13 @@ import {
   updateIngredientHandler,
   deleteIngredientHandler,
 } from './controllers/ingredient.controller';
+import {
+  getIngredientInstancesHandler,
+  getIngredientInstanceHandler,
+  createIngredientInstanceHandler,
+  updateIngredientInstanceHandler,
+  deleteIngredientInstanceHandler,
+} from './controllers/ingredientInstance.controller';
 import { createUserSchema } from './schemas/user.schema';
 import { createSessionSchema } from './schemas/session.schema';
 import {
@@ -22,6 +29,12 @@ import {
   updateIngredientSchema,
   deleteIngredientSchema,
 } from './schemas/ingredient.schema';
+import {
+  createIngredientInstanceSchema,
+  getIngredientInstanceSchema,
+  updateIngredientInstanceSchema,
+  deleteIngredientInstanceSchema,
+} from './schemas/ingredientInstance.schema';
 
 export default function (app: Express) {
   app.get('/healthcheck', (req: Request, res: Response) => res.sendStatus(200));
@@ -67,5 +80,40 @@ export default function (app: Express) {
     '/api/ingredients/:ingredientId',
     [requireUser, validateResource(deleteIngredientSchema)],
     deleteIngredientHandler,
+  );
+
+  // Get all the ingredients
+  app.get(
+    '/api/ingredient-instances',
+    requireUser,
+    getIngredientInstancesHandler,
+  );
+
+  // Create an ingredient
+  app.post(
+    '/api/ingredient-instances',
+    [requireUser, validateResource(createIngredientInstanceSchema)],
+    createIngredientInstanceHandler,
+  );
+
+  // Get an ingredient
+  app.get(
+    '/api/ingredient-instances/:ingredientInstanceId',
+    [requireUser, validateResource(getIngredientInstanceSchema)],
+    getIngredientInstanceHandler,
+  );
+
+  // Update an ingredient
+  app.put(
+    '/api/ingredient-instances/:ingredientInstanceId',
+    [requireUser, validateResource(updateIngredientInstanceSchema)],
+    updateIngredientInstanceHandler,
+  );
+
+  // Delete an ingredient
+  app.delete(
+    '/api/ingredient-instances/:ingredientInstanceId',
+    [requireUser, validateResource(deleteIngredientInstanceSchema)],
+    deleteIngredientInstanceHandler,
   );
 }
