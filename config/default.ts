@@ -7,7 +7,7 @@ export default {
   dbUri: process.env.ATLAS_URI,
   saltWorkFactor: 10,
   accessTokenTtl: '15m',
-  refreshTokenTtl: '15m',
+  refreshTokenTtl: '1y',
   privateKey: (process.env.PRIVATE_KEY || '').replace(/\\n/gm, '\n'),
   publicKey: (process.env.PUBLIC_KEY || '').replace(/\\n/gm, '\n'),
 };

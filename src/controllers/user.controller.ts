@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import logger from '../utils/logger';
 import { CreateUserInput } from '../schemas/user.schema';
-import createUser from '../services/user.service';
+import { createUser } from '../services/user.service';
 
 export default async function createUserHandler(
   req: Request<

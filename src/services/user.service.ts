@@ -2,7 +2,7 @@ import UserModel, { UserInput, UserDocument } from '../models/user.model';
 import { FilterQuery } from 'mongoose';
 import { omit } from 'lodash';
 
-export default async function createUser(input: UserInput) {
+export async function createUser(input: UserInput) {
   try {
     const user = await UserModel.create(input);
 
