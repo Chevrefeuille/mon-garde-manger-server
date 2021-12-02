@@ -3,8 +3,7 @@ import config from 'config';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 import SessionModel, { SessionDocument } from '../models/session.model';
 import { verifyJwt, signJwt } from '../utils/jwt.utils';
-import { findUser } from './user.service';
-import { UserInput } from '../models/user.model';
+import { findUserInput } from './user.service';
 
 export async function createSession(userId: string, userAgent: string) {
   const session = await SessionModel.create({ user: userId, userAgent });
@@ -36,7 +35,9 @@ export async function reIssueAccessToken({
 
   if (!session || !session.valid) return false;
 
-  const user = await findUser({ _id: session.user } as unknown as UserInput);
+  const user = await findUserInput({
+    _id: session.user,
+  });
 
   if (!user) return false;
 

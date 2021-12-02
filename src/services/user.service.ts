@@ -18,7 +18,7 @@ export async function validatePassword({
 }: {
   email: string;
   password: string;
-}) {
+}): Promise<boolean | any> {
   const user = await UserModel.findOne({ email });
 
   if (!user) {
@@ -32,6 +32,14 @@ export async function validatePassword({
   return omit(user.toJSON(), 'password');
 }
 
-export async function findUser(query: FilterQuery<UserDocument>) {
+export async function findUser(
+  query: FilterQuery<UserDocument>,
+): Promise<UserDocument | null> {
+  return UserModel.findOne(query);
+}
+
+export async function findUserInput(
+  query: FilterQuery<UserDocument>,
+): Promise<UserInput> {
   return UserModel.findOne(query).lean();
 }

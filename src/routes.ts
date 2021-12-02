@@ -1,5 +1,5 @@
 import { Express, Request, Response } from 'express';
-import requireUser from './middlewares/requireUser';
+import authorizeUser from './middlewares/authorizeUser';
 import validateResource from './middlewares/validateResource';
 import createUserHandler from './controllers/user.controller';
 import {
@@ -47,73 +47,106 @@ export default function (app: Express) {
     createUserSessionHandler,
   );
 
-  app.get('/api/sessions', requireUser, getUserSessionsHandler);
+  app.get(
+    '/api/sessions',
+    authorizeUser('session:list'),
+    getUserSessionsHandler,
+  );
 
-  app.delete('/api/sessions', requireUser, deleteSessionHandler);
+  app.delete(
+    '/api/sessions',
+    authorizeUser('session:delete'),
+    deleteSessionHandler,
+  );
 
   // Get all the ingredients
-  app.get('/api/ingredients', requireUser, getIngredientsHandler);
+  app.get(
+    '/api/ingredients',
+    authorizeUser('ingredient:list'),
+    getIngredientsHandler,
+  );
 
   // Create an ingredient
   app.post(
     '/api/ingredients',
-    [requireUser, validateResource(createIngredientSchema)],
+    [
+      authorizeUser('ingredient:create'),
+      validateResource(createIngredientSchema),
+    ],
     createIngredientHandler,
   );
 
   // Get an ingredient
   app.get(
     '/api/ingredients/:ingredientId',
-    [requireUser, validateResource(getIngredientSchema)],
+    [authorizeUser('ingredient:read'), validateResource(getIngredientSchema)],
     getIngredientHandler,
   );
 
   // Update an ingredient
   app.put(
     '/api/ingredients/:ingredientId',
-    [requireUser, validateResource(updateIngredientSchema)],
+    [
+      authorizeUser('ingredient:update'),
+      validateResource(updateIngredientSchema),
+    ],
     updateIngredientHandler,
   );
 
   // Delete an ingredient
   app.delete(
     '/api/ingredients/:ingredientId',
-    [requireUser, validateResource(deleteIngredientSchema)],
+    [
+      authorizeUser('ingredient:delete'),
+      validateResource(deleteIngredientSchema),
+    ],
     deleteIngredientHandler,
   );
 
-  // Get all the ingredients
+  // Get all the ingredient instances
   app.get(
     '/api/ingredient-instances',
-    requireUser,
+    authorizeUser('ingredient-instance:list'),
     getIngredientInstancesHandler,
   );
 
-  // Create an ingredient
+  // Create an ingredient instance
   app.post(
     '/api/ingredient-instances',
-    [requireUser, validateResource(createIngredientInstanceSchema)],
+    [
+      authorizeUser('ingredient-instance:create'),
+      validateResource(createIngredientInstanceSchema),
+    ],
     createIngredientInstanceHandler,
   );
 
-  // Get an ingredient
+  // Get an ingredient instance
   app.get(
     '/api/ingredient-instances/:ingredientInstanceId',
-    [requireUser, validateResource(getIngredientInstanceSchema)],
+    [
+      authorizeUser('ingredient-instance:read'),
+      validateResource(getIngredientInstanceSchema),
+    ],
     getIngredientInstanceHandler,
   );
 
-  // Update an ingredient
+  // Update an ingredient instance
   app.put(
     '/api/ingredient-instances/:ingredientInstanceId',
-    [requireUser, validateResource(updateIngredientInstanceSchema)],
+    [
+      authorizeUser('ingredient-instance:update'),
+      validateResource(updateIngredientInstanceSchema),
+    ],
     updateIngredientInstanceHandler,
   );
 
   // Delete an ingredient
   app.delete(
     '/api/ingredient-instances/:ingredientInstanceId',
-    [requireUser, validateResource(deleteIngredientInstanceSchema)],
+    [
+      authorizeUser('ingredient-instance:delete'),
+      validateResource(deleteIngredientInstanceSchema),
+    ],
     deleteIngredientInstanceHandler,
   );
 }
