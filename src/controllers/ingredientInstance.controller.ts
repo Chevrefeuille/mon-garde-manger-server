@@ -17,7 +17,8 @@ export async function getIngredientInstancesHandler(
   req: Request,
   res: Response,
 ) {
-  const sessions = await findIngredientInstances();
+  const userId = res.locals.user._id;
+  const sessions = await findIngredientInstances({ user: userId });
 
   return res.send(sessions);
 }
@@ -26,16 +27,22 @@ export async function getIngredientInstanceHandler(
   req: Request<UpdateIngredientInstanceInput['params']>,
   res: Response,
 ) {
-  const IngredientInstanceId = get(req, 'params.ingredientInstanceId');
-  const IngredientInstance = await findIngredientInstanceById(
-    IngredientInstanceId,
+  const userId = res.locals.user._id;
+
+  const ingredientInstanceId = get(req, 'params.ingredientInstanceId');
+  const ingredientInstance = await findIngredientInstanceById(
+    ingredientInstanceId,
   );
 
-  if (!IngredientInstance) {
+  if (!ingredientInstance) {
     return res.sendStatus(404);
   }
 
-  return res.send(IngredientInstance);
+  if (String(ingredientInstance.user) !== userId) {
+    return res.sendStatus(403);
+  }
+
+  return res.send(ingredientInstance);
 }
 
 export async function createIngredientInstanceHandler(
@@ -46,6 +53,8 @@ export async function createIngredientInstanceHandler(
   >,
   res: Response,
 ) {
+  const userId = res.locals.user._id;
+
   const requestBody = req.body;
 
   const ingredientId = get(req, 'body.ingredient');
@@ -55,7 +64,7 @@ export async function createIngredientInstanceHandler(
     return res.status(400).send('Ingredient does not exist');
   }
 
-  const post = await createIngredientInstance({ ...requestBody });
+  const post = await createIngredientInstance({ ...requestBody, user: userId });
 
   return res.send(post);
 }
@@ -64,15 +73,21 @@ export async function updateIngredientInstanceHandler(
   req: Request<UpdateIngredientInstanceInput['params']>,
   res: Response,
 ) {
-  const IngredientInstanceId = get(req, 'params.ingredientInstanceId');
+  const userId = res.locals.user._id;
+
+  const ingredientInstanceId = get(req, 'params.ingredientInstanceId');
   const update = req.body;
 
-  const IngredientInstance = await findIngredientInstanceById(
-    IngredientInstanceId,
+  const ingredientInstance = await findIngredientInstanceById(
+    ingredientInstanceId,
   );
 
-  if (!IngredientInstance) {
+  if (!ingredientInstance) {
     return res.sendStatus(404);
+  }
+
+  if (String(ingredientInstance.user) !== userId) {
+    return res.sendStatus(403);
   }
 
   const ingredientId = get(req, 'body.ingredient');
@@ -83,7 +98,7 @@ export async function updateIngredientInstanceHandler(
   }
 
   const updatedIngredientInstance = await findAndUpdateIngredientInstance(
-    { IngredientInstanceId },
+    { ingredientInstanceId },
     update,
     { new: true },
   );
@@ -95,17 +110,23 @@ export async function deleteIngredientInstanceHandler(
   req: Request<UpdateIngredientInstanceInput['params']>,
   res: Response,
 ) {
-  const IngredientInstanceId = get(req, 'params.ingredientInstanceId');
+  const userId = res.locals.user._id;
 
-  const IngredientInstance = await findIngredientInstanceById(
-    IngredientInstanceId,
+  const ingredientInstanceId = get(req, 'params.ingredientInstanceId');
+
+  const ingredientInstance = await findIngredientInstanceById(
+    ingredientInstanceId,
   );
 
-  if (!IngredientInstance) {
+  if (!ingredientInstance) {
     return res.sendStatus(404);
   }
 
-  await deleteIngredientInstance({ IngredientInstanceId });
+  if (String(ingredientInstance.user) !== userId) {
+    return res.sendStatus(403);
+  }
+
+  await deleteIngredientInstance({ ingredientInstanceId });
 
   return res.sendStatus(200);
 }

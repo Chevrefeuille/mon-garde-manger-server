@@ -4,8 +4,10 @@ import IngredientInstanceModel, {
   IngredientInstanceInput,
 } from '../models/IngredientInstance.model';
 
-export async function findIngredientInstances() {
-  return IngredientInstanceModel.find().lean();
+export async function findIngredientInstances(
+  query: FilterQuery<IngredientInstanceDocument>,
+) {
+  return IngredientInstanceModel.find(query).lean();
 }
 
 export function findIngredientInstance(
