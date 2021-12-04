@@ -64,7 +64,12 @@ export async function createIngredientInstanceHandler(
     return res.status(400).send('Ingredient does not exist');
   }
 
-  const post = await createIngredientInstance({ ...requestBody, user: userId });
+  const post = await createIngredientInstance({
+    ...requestBody,
+    name: ingredient.name,
+    type: ingredient.type,
+    user: userId,
+  });
 
   return res.send(post);
 }
